@@ -62,11 +62,44 @@ mixin _$Cart on _Cart, Store {
   final _$_CartActionController = ActionController(name: '_Cart');
 
   @override
+  void emptyCart() {
+    final _$actionInfo =
+        _$_CartActionController.startAction(name: '_Cart.emptyCart');
+    try {
+      return super.emptyCart();
+    } finally {
+      _$_CartActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addToCart(Product product) {
     final _$actionInfo =
         _$_CartActionController.startAction(name: '_Cart.addToCart');
     try {
       return super.addToCart(product);
+    } finally {
+      _$_CartActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeProductFromCart(Product product) {
+    final _$actionInfo = _$_CartActionController.startAction(
+        name: '_Cart.removeProductFromCart');
+    try {
+      return super.removeProductFromCart(product);
+    } finally {
+      _$_CartActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeProductQuantity(Product product, int quantity) {
+    final _$actionInfo = _$_CartActionController.startAction(
+        name: '_Cart.changeProductQuantity');
+    try {
+      return super.changeProductQuantity(product, quantity);
     } finally {
       _$_CartActionController.endAction(_$actionInfo);
     }

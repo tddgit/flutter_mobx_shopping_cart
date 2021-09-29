@@ -6,7 +6,6 @@ import '/cart/cart.dart';
 import '/shared/models/product.dart';
 import '/shared/styles/app_colors.dart';
 import '/shared/styles/app_fonts.dart';
-import '/shared/utils/app_variables.dart';
 
 import 'cart_icon_button.dart';
 import 'cart_list_tile.dart';
@@ -27,15 +26,8 @@ class CartAppBar extends StatefulWidget {
 
 class _CartAppBarState extends State<CartAppBar> {
   bool showCart = false;
-  //TODO: 9. Remove product and quantity placeholders
-  Product product = Product(
-    name: 'Blueberries',
-    description: 'Delicious blueberries from the wild.',
-    category: Category.food,
-    price: 55.0,
-    imageURL: 'assets/pictures/Blueberries.png',
-  );
-  int quantity = 2;
+  late Product product;
+  late int quantity;
 
   void _cartOnClick() {
     setState(() {
@@ -44,7 +36,8 @@ class _CartAppBarState extends State<CartAppBar> {
   }
 
   void _deleteOnClick() {
-    //TODO: 10. Make an empty cart function
+    final Cart cart = Provider.of<Cart>(context, listen: false);
+    cart.emptyCart();
   }
 
   void _categoryOnClick(BuildContext context) {
@@ -52,7 +45,8 @@ class _CartAppBarState extends State<CartAppBar> {
   }
 
   void _checkoutOnClick() {
-    //TODO: 15. This is up to you 😄
+    final Cart cart = Provider.of<Cart>(context, listen: false);
+    cart.emptyCart();
   }
 
   Widget _buildButton() {
@@ -92,7 +86,6 @@ class _CartAppBarState extends State<CartAppBar> {
     final double screenHeight = MediaQuery.of(context).size.height;
     const double appBarHeight = 56;
     double dragStart = 0;
-    final Cart cart = Provider.of<Cart>(context, listen: false);
 
     return GestureDetector(
       onVerticalDragStart: (d) {
@@ -172,7 +165,6 @@ class _CartAppBarState extends State<CartAppBar> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //TODO: 8. Show cart value and freight cost if any.
               //Change placeholder Text widget below
               Observer(builder: (_) {
                 return Row(
@@ -202,27 +194,29 @@ class _CartAppBarState extends State<CartAppBar> {
     final Cart cart = Provider.of<Cart>(context, listen: false);
 
     return Expanded(
-      child: ListView.builder(
-        itemBuilder: (context, item) {
-          return Observer(
-            builder: (_) {
-              final quantity = cart.getProductQuantity(product);
+      child: Observer(builder: (_) {
+        return ListView(
+          children: List.generate(
+            cart.uniqueProducts.length,
+            (index) {
+              product = cart.uniqueProducts[index];
+              quantity = cart.getProductQuantity(product);
 
               return quantity > 0
                   ? CartListTile(
-                      product: cart.uniqueProducts[item],
+                      product: product,
                       quantity: quantity,
                     )
                   : SizedBox();
             },
-          );
-        },
-        itemCount: cart.uniqueProducts.length,
-      ),
+          ),
+        );
+      }),
     );
   }
 
   Widget _buildCheckedOutButton() {
+    // ignore: deprecated_member_use
     return RaisedButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),

@@ -7,7 +7,8 @@ class Cart = _Cart with _$Cart;
 
 abstract class _Cart with Store {
   _Cart() {
-    reaction((_) => _cartContent.length, (int cartItemCount) {
+    _addCartFreightReaction =
+        reaction((_) => _cartContent.length, (int cartItemCount) {
       if (cartItemCount >= 10 && _freight == 0) {
         _freight = 20;
       } else if (cartItemCount < 10 && _freight != 0) {
@@ -15,13 +16,22 @@ abstract class _Cart with Store {
       }
     });
   }
+
+  late void Function() _addCartFreightReaction;
+
   @observable
   // ignore: prefer_final_fields
   ObservableList<Product> _cartContent = ObservableList<Product>();
-  ObservableList<Product> get cartContent => _cartContent;
 
   @observable
   double _freight = 0;
+
+  @action
+  void emptyCart() {
+    _cartContent.clear();
+  }
+
+  ObservableList<Product> get cartContent => _cartContent;
 
   int getProductQuantity(Product product) =>
       ObservableList.of(_cartContent.where((p) => p == product)).length;
@@ -36,15 +46,27 @@ abstract class _Cart with Store {
       .fold(0, (prev, element) => prev + element);
 
   @computed
-  double get freight =>
-      ObservableList<Product>.of(_cartContent).length > 10 ? 100.0 : 0.0;
+  double get freight => _freight;
 
   @action
   void addToCart(Product product) {
     _cartContent.add(product);
   }
 
+  @action
+  void removeProductFromCart(Product product) {
+    _cartContent.removeWhere((element) => element == product);
+  }
+
+  @action
+  void changeProductQuantity(Product product, int quantity) {
+    final int difference = quantity - getProductQuantity(product);
+    _cartContent.addAll(
+      List.generate(difference, (_) => product),
+    );
+  }
+
   void dispose() {
-    _cartContent.clear();
+    _addCartFreightReaction();
   }
 }
