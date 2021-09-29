@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_example/shared/styles/app_colors.dart';
-import 'package:state_management_example/shared/styles/app_fonts.dart';
+import '/shared/styles/app_colors.dart';
+import '/shared/styles/app_fonts.dart';
 
 class AppDialog {
   static String _addOnClick({TextEditingController? textEditingController}) {
@@ -121,7 +121,8 @@ class AppDialog {
   }
 
   static Widget _buildPlusMinusQuantity(
-      TextEditingController textEditingController) {
+    TextEditingController textEditingController,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[

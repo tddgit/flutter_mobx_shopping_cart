@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:state_management_example/shared/utils/app_variables.dart';
+import '/shared/utils/app_variables.dart';
 
 @immutable
 class Product {

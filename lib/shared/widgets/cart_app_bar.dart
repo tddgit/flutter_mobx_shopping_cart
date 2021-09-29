@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import '/cart/cart.dart';
 
-import 'package:state_management_example/shared/models/product.dart';
-import 'package:state_management_example/shared/styles/app_colors.dart';
-import 'package:state_management_example/shared/styles/app_fonts.dart';
-import 'package:state_management_example/shared/utils/app_variables.dart';
+import '/shared/models/product.dart';
+import '/shared/styles/app_colors.dart';
+import '/shared/styles/app_fonts.dart';
+import '/shared/utils/app_variables.dart';
 
 import 'cart_icon_button.dart';
 import 'cart_list_tile.dart';
@@ -89,7 +92,7 @@ class _CartAppBarState extends State<CartAppBar> {
     final double screenHeight = MediaQuery.of(context).size.height;
     const double appBarHeight = 56;
     double dragStart = 0;
-    //TODO: 6. Add provider for cart
+    final Cart cart = Provider.of<Cart>(context, listen: false);
 
     return GestureDetector(
       onVerticalDragStart: (d) {
@@ -123,7 +126,7 @@ class _CartAppBarState extends State<CartAppBar> {
               Expanded(
                 child: Column(
                   children: <Widget>[
-                    _buildListOfCartContent(),
+                    _buildListOfCartContent(context),
                     _buildTotalPriceTextAndGoToCheckoutButton(),
                   ],
                 ),
@@ -160,6 +163,8 @@ class _CartAppBarState extends State<CartAppBar> {
   }
 
   Padding _buildTotalPriceTextAndGoToCheckoutButton() {
+    final Cart cart = Provider.of<Cart>(context, listen: false);
+
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -169,10 +174,21 @@ class _CartAppBarState extends State<CartAppBar> {
             children: <Widget>[
               //TODO: 8. Show cart value and freight cost if any.
               //Change placeholder Text widget below
-              Text(
-                '\$${product.price * quantity}',
-                style: AppFonts.cartValue(),
-              ),
+              Observer(builder: (_) {
+                return Row(
+                  children: [
+                    Text(
+                      '\$${cart.cartValue}',
+                      style: AppFonts.cartValue(),
+                    ),
+                    if (cart.freight != 0)
+                      Text(
+                        ' + \$${cart.freight}',
+                        style: AppFonts.cartValue(),
+                      ),
+                  ],
+                );
+              }),
               // ignore: deprecated_member_use
               _buildCheckedOutButton(),
             ],
@@ -182,17 +198,26 @@ class _CartAppBarState extends State<CartAppBar> {
     );
   }
 
-  Widget _buildListOfCartContent() {
+  Widget _buildListOfCartContent(BuildContext context) {
+    final Cart cart = Provider.of<Cart>(context, listen: false);
+
     return Expanded(
-      child: ListView(
-        //TODO: 7. Show cart content
-        //Change placeholder children below
-        children: <Widget>[
-          CartListTile(
-            product: product,
-            quantity: quantity,
-          ),
-        ],
+      child: ListView.builder(
+        itemBuilder: (context, item) {
+          return Observer(
+            builder: (_) {
+              final quantity = cart.getProductQuantity(product);
+
+              return quantity > 0
+                  ? CartListTile(
+                      product: cart.uniqueProducts[item],
+                      quantity: quantity,
+                    )
+                  : SizedBox();
+            },
+          );
+        },
+        itemCount: cart.uniqueProducts.length,
       ),
     );
   }

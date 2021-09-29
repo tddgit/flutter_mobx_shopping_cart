@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:state_management_example/cart/cart.dart';
-import 'package:state_management_example/shared/styles/app_colors.dart';
-import 'package:state_management_example/shared/styles/app_fonts.dart';
+import '/cart/cart.dart';
+import '/shared/styles/app_colors.dart';
+import '/shared/styles/app_fonts.dart';
 
 class CartIconButton extends StatelessWidget {
   const CartIconButton({
@@ -20,7 +21,7 @@ class CartIconButton extends StatelessWidget {
         height: 50,
         width: 50,
         child: Stack(
-          children: <Widget>
+          children: <Widget>[
             Center(
               child: Icon(
                 Icons.shopping_cart,
@@ -36,13 +37,18 @@ class CartIconButton extends StatelessWidget {
                 color: AppColors.appRed,
                 shape: BoxShape.circle,
               ),
-              //TODO: 5. Show cart content size.
               //Replace placeholder Text widget below
-              child: Text(
-                '1',
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: AppFonts.cartQuantityNumber(),
+              child: Observer(
+                builder: (_) {
+                  return Center(
+                    child: Text(
+                      cart.cartContent.length.toString(),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: AppFonts.cartQuantityNumber(),
+                    ),
+                  );
+                },
               ),
             ),
           ],

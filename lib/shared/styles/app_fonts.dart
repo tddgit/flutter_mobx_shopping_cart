@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_example/shared/styles/app_colors.dart';
+import '/shared/styles/app_colors.dart';
 
 class AppFonts {
   static final regularFont = FontWeight.w400;

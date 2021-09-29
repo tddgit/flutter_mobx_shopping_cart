@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:state_management_example/cart/cart.dart';
+import '/cart/cart.dart';
 
-import 'package:state_management_example/shared/models/product.dart';
-import 'package:state_management_example/shared/styles/app_colors.dart';
-import 'package:state_management_example/shared/styles/app_fonts.dart';
+import '/shared/models/product.dart';
+import '/shared/styles/app_colors.dart';
+import '/shared/styles/app_fonts.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({

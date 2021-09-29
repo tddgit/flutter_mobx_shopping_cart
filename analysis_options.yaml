@@ -29,6 +29,7 @@ analyzer:
     library_private_types_in_public_api: ignore
     avoid_print: ignore
     always_put_control_body_on_new_line: ignore
+    avoid_types_on_closure_parameters: ignore
 
 
 

@@ -1,5 +1,5 @@
-import 'package:state_management_example/shared/models/product.dart';
-import 'package:state_management_example/shared/utils/app_variables.dart';
+import '/shared/models/product.dart';
+import '/shared/utils/app_variables.dart';
 
 class ProductRange {
   ProductRange({required this.products});

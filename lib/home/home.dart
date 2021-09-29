@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_example/home/widgets/category_card.dart';
-import 'package:state_management_example/shared/styles/app_colors.dart';
-import 'package:state_management_example/shared/utils/app_variables.dart';
-import 'package:state_management_example/shared/widgets/cart_app_bar.dart';
+import '/home/widgets/category_card.dart';
+import '/shared/styles/app_colors.dart';
+import '/shared/utils/app_variables.dart';
+import '/shared/widgets/cart_app_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

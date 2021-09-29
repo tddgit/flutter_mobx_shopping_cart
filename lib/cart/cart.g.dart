@@ -16,6 +16,18 @@ mixin _$Cart on _Cart, Store {
           Computed<List<Product>>(() => super.uniqueProducts,
               name: '_Cart.uniqueProducts'))
       .value;
+  Computed<double>? _$cartValueComputed;
+
+  @override
+  double get cartValue => (_$cartValueComputed ??=
+          Computed<double>(() => super.cartValue, name: '_Cart.cartValue'))
+      .value;
+  Computed<double>? _$freightComputed;
+
+  @override
+  double get freight => (_$freightComputed ??=
+          Computed<double>(() => super.freight, name: '_Cart.freight'))
+      .value;
 
   final _$_cartContentAtom = Atom(name: '_Cart._cartContent');
 
@@ -32,10 +44,40 @@ mixin _$Cart on _Cart, Store {
     });
   }
 
+  final _$_freightAtom = Atom(name: '_Cart._freight');
+
+  @override
+  double get _freight {
+    _$_freightAtom.reportRead();
+    return super._freight;
+  }
+
+  @override
+  set _freight(double value) {
+    _$_freightAtom.reportWrite(value, super._freight, () {
+      super._freight = value;
+    });
+  }
+
+  final _$_CartActionController = ActionController(name: '_Cart');
+
+  @override
+  void addToCart(Product product) {
+    final _$actionInfo =
+        _$_CartActionController.startAction(name: '_Cart.addToCart');
+    try {
+      return super.addToCart(product);
+    } finally {
+      _$_CartActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
-uniqueProducts: ${uniqueProducts}
+uniqueProducts: ${uniqueProducts},
+cartValue: ${cartValue},
+freight: ${freight}
     ''';
   }
 }
